@@ -7,6 +7,9 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Drop existing objects first (migrate:fresh only drops TABLES, not views/SPs/etc.)
+        $this->down();
+
         DB::statement("
             CREATE VIEW vw_active_rentals AS
             SELECT

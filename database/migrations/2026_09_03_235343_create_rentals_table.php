@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('daily_rate', 18, 2);
             $table->integer('total_days');
             $table->decimal('estimated_cost', 18, 2);
-            $table->enum('status', ['ACTIVE', 'RETURNED'])->default('ACTIVE');
+            $table->string('status', 20)->default('ACTIVE');
             $table->timestamps();
 
             $table->index(['car_id', 'status', 'start_date', 'end_date']);
