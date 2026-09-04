@@ -32,11 +32,6 @@ Route::middleware('auth')->group(function () {
     // Cars CRUD (Blade)
     Route::resource('cars', CarController::class);
 
-    // Cars Search (AngularJS)
-    Route::get('/cars-search', function () {
-        return view('cars.search');
-    })->name('cars.search');
-
     // Rentals
     Route::get('/rentals/create', [RentalController::class, 'create'])->name('rentals.create');
     Route::post('/rentals', [RentalController::class, 'store'])->name('rentals.store');

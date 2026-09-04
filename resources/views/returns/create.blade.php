@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white"><h4 class="mb-0">Return a Car</h4></div>
+            <div class="card-header bg-primary text-dark"><h4 class="mb-0">Return a Car</h4></div>
             <div class="card-body p-4">
                 <p class="mb-4">Enter the license plate number of the car you wish to return. Note that you can only return cars that you have actively rented.</p>
                 
@@ -19,7 +19,7 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-dark btn-lg w-100">Process Return</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold">Process Return</button>
                 </form>
             </div>
         </div>
