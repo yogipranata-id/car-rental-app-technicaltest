@@ -6,21 +6,28 @@ Language & Framework
 - Laravel 13.30.1
 
 Database
-- SQL Server 2022 Express (T-SQL compatible with SQL Server 2008)
+- SQL Server 2022 Express (T-SQL compatible with SQL Server 2008+)
 - ODBC Driver 17 for SQL Server
 - PHP extensions: pdo_sqlsrv, sqlsrv
 
-Frontend
+Frontend / UI
 - Blade (Laravel templating engine)
+- AngularJS 1.8.3 (Seamlessly integrated into Blade for live search)
 - Bootstrap 5.3.2 (CSS framework, via CDN)
 - Bootstrap Icons 1.11.1 (via CDN)
-- AngularJS 1.8.3 (via CDN, for car search page)
+- Custom CSS (Premium UI overrides, soft shadows, micro-animations)
+- Google Fonts (Inter)
+
+Architecture
+- Custom Auth (built-in Laravel auth without Jetstream/Breeze bloat)
+- RESTful API (JSON endpoints built in Laravel to serve AngularJS)
+- Stored Procedures & Transactions (for concurrency & race-condition prevention)
 
 Development Tools
 - Laragon (local dev environment)
 - Composer (PHP dependency manager)
-- Git (version control)
+- Git & GitHub (version control)
 - SSMS 22 (SQL Server Management Studio)
 
 Testing
-- PHPUnit (ships with Laravel)
+- PHPUnit (Feature testing directly against live SQL Server Database)
