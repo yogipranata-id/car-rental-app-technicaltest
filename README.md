@@ -1,58 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Car Rental Web App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi persewaan mobil berbasis web, dibangun sebagai technical test posisi Web Programmer.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend:** PHP 8.5, Laravel 13
+- **Database:** SQL Server 2022 Express (T-SQL kompatibel SQL Server 2008)
+- **Frontend:** Blade + Bootstrap 5 (UI utama), AngularJS 1.8 (halaman pencarian mobil)
+- **Database Objects:** Stored Procedure, Function, View, Trigger (dijalankan via migration)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fitur
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Registrasi & Login/Logout** — dengan validasi server-side dan password hashing
+2. **Manajemen Mobil (CRUD)** — tambah, edit, hapus, daftar mobil
+3. **Pencarian Mobil** — filter merek, model, ketersediaan (Blade & AngularJS)
+4. **Peminjaman Mobil** — lewat stored procedure `sp_CreateRental` dengan cek bentrok tanggal
+5. **My Rentals** — lewat SQL View `vw_active_rentals` + Eloquent
+6. **Pengembalian Mobil** — lewat stored procedure `sp_ReturnRental` dengan verifikasi kepemilikan
+7. **REST API** — `GET /api/cars` dikonsumsi oleh komponen AngularJS
 
-## Learning Laravel
+## Objek SQL Server yang Dipakai
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Objek | Nama | Dipakai Di |
+|---|---|---|
+| View | `vw_active_rentals` | Halaman My Rentals (sewa aktif) |
+| Function | `fn_CalculateRentalCost` | Dipanggil oleh `sp_CreateRental` |
+| Stored Procedure | `sp_CreateRental` | `RentalService::createRental()` |
+| Stored Procedure | `sp_ReturnRental` | `RentalService::returnRental()` |
+| Trigger | `trg_rentals_SetUpdatedAt` | Auto-update `updated_at` saat status rental berubah |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Instalasi
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Prasyarat
+- PHP 8.x dengan extension `pdo_sqlsrv` dan `sqlsrv`
+- Composer
+- SQL Server (2008+ kompatibel, tested di 2022 Express)
+- ODBC Driver 17+ for SQL Server
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Langkah
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clone repo
+git clone https://github.com/yogipranata-id/car-rental-app-technicaltest.git
+cd car-rental-app-technicaltest
 
-php artisan boost:install
+# 2. Install dependencies
+composer install
+
+# 3. Salin .env dan konfigurasi
+cp .env.example .env
+php artisan key:generate
+
+# 4. Edit .env — sesuaikan koneksi database:
+# DB_CONNECTION=sqlsrv
+# DB_HOST=localhost\SQLEXPRESS
+# DB_PORT=1433
+# DB_DATABASE=car_rental
+# DB_USERNAME=<user>
+# DB_PASSWORD=<password>
+# DB_TRUST_SERVER_CERTIFICATE=true
+
+# 5. Buat database di SQL Server (via SSMS atau sqlcmd):
+# CREATE DATABASE car_rental;
+
+# 6. Jalankan migration dan seeder
+php artisan migrate:fresh --seed
+
+# 7. Jalankan aplikasi
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Akses di `http://localhost:8000`.
 
-## Contributing
+## Menjalankan Test
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan test --filter=RentalConflictTest
+```
 
-## Code of Conduct
+> **Catatan:** Test berjalan langsung ke SQL Server (bukan SQLite), karena menguji stored procedure. Pastikan koneksi database `.env` sudah benar.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Akun Demo (dari seeder)
 
-## Security Vulnerabilities
+| Email | Password |
+|---|---|
+| test@example.com | password |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Struktur Folder Penting
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+app/
+├── Http/Controllers/       # Controller (Auth, Car, Rental, Return, API)
+├── Http/Requests/           # Form Request validation
+├── Models/                  # Eloquent models
+└── Services/                # RentalService (panggil SP)
+database/
+├── migrations/              # Tabel + objek SQL Server
+├── seeders/                 # User & Car seeder
+└── factories/               # UserFactory
+resources/views/
+├── layouts/app.blade.php    # Master layout Bootstrap 5
+├── auth/                    # Login & Register
+├── cars/                    # CRUD + AngularJS search
+├── rentals/                 # Booking & My Rentals
+└── returns/                 # Return car + receipt
+tests/Feature/
+└── RentalConflictTest.php   # Test aturan bentrok tanggal
+```

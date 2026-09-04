@@ -25,3 +25,9 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# AI Agents & Skills
+/.agents/
+AGENTS.md
+AGENT_BRIEF.md
+CLAUDE.md

@@ -29,6 +29,9 @@
                         <a class="nav-link" href="{{ route('cars.index') }}">Cars</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('cars.search') }}">Search Cars</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('rentals.my') }}">My Rentals</a>
                     </li>
                     <li class="nav-item">

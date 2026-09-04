@@ -29,8 +29,13 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Cars CRUD
+    // Cars CRUD (Blade)
     Route::resource('cars', CarController::class);
+
+    // Cars Search (AngularJS)
+    Route::get('/cars-search', function () {
+        return view('cars.search');
+    })->name('cars.search');
 
     // Rentals
     Route::get('/rentals/create', [RentalController::class, 'create'])->name('rentals.create');
